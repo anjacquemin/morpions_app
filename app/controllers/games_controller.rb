@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   def show
-    game = Game.find(params[:id])
-    game.update_attribute(:is_ready, true)
+    @game = Game.find(params[:id])
+    # game.update_attribute(:is_ready, true)
   end
 
   def index
@@ -20,6 +20,16 @@ class GamesController < ApplicationController
       render "index"
     end
   end
+
+  def update
+    @game = Game.find(params[:id])
+    puts params
+    puts "update methode :"
+    puts request
+    GameChannel.broadcast_to(@game, "datadata")
+  end
+
+
 
   private
 

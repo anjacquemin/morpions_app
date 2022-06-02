@@ -1,9 +1,24 @@
 // app/javascript/controllers/game_controller.js
 import { Controller } from "@hotwired/stimulus"
+import consumer from "../channels/consumer"
 import { eventListeners } from "@popperjs/core"
+import { csrfToken } from "@rails/ujs"
 
 export default class extends Controller {
+
+  static values = {gameId: Number}
+
   static targets = ["results", "winner","xxx"]
+
+  connect() {
+    console.log(`id ${this.gameIdValue}`)
+    this.channel = consumer.subscriptions.create(
+      { channel: "GameChannel", id: this.gameIdValue },
+      { received: data =>
+        console.log(data)}
+    )
+    console.log(`Subscribe to the chatroom with the id ${this.gameIdValue}.`)
+  }
 
   playerAction(event) {
     const player_to_play = this.element.dataset.player
@@ -12,6 +27,8 @@ export default class extends Controller {
       displayResults(this.resultsTarget, this.winnerTarget, player_to_play)
       disableClickListenner(this.element)
     }
+    console.log("before send request")
+    sendRequest(this.gameIdValue)
   }
 
   boardRefresh() {
@@ -28,6 +45,16 @@ export default class extends Controller {
     this.element.dataset.player = "player1"
   }
 }
+
+const sendRequest = (gameIdValue) => {
+  console.log("send request")
+  fetch(`http://localhost:3000/games/${gameIdValue}`, {
+    method: "PATCH",
+    headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
+    body: new FormData("somedata")
+  })
+}
+
 
 const boardDisplay = (event, tbody, player_to_play) => {
   let class_to_add
