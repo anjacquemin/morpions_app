@@ -1,0 +1,21 @@
+<div class="container">
+  <h1>Welcome to morpions site</h1>
+  <div class="d-flex flex-column">
+    <div class="d-flex  flex-column">
+      <% @not_ready_games.each do |game| %>
+      <div>
+        <%= link_to game.name, game_path(game) %>
+        <% end %>
+      </div>
+    </div>
+    <div>
+      <p>create a new game</p>
+      <%= simple_form_for(@game)do|f|%>
+        <%= f.input :name %>
+        <%= f.input :local, as: :radio_buttons, collection: ['Local', 'Online'] %>
+        <%= f.submit%>
+      <%end%>
+    </div>
+  </div>
+
+</div>
