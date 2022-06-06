@@ -1,13 +1,13 @@
 <table>
   <tbody id="morpions">
     <tr>
-      <%= render 'tds' %>
+      <%= render 'tds', coords: (0..2).to_a %>
     </tr>
     <tr>
-      <%= render 'tds' %>
+      <%= render 'tds', coords: (3..5).to_a %>
     </tr>
     <tr>
-      <%= render 'tds' %>
+      <%= render 'tds', coords: (6..8).to_a %>
     </tr>
   </tbody>
 </table>

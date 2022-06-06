@@ -1,0 +1,10 @@
+<div data-controller="game" data-game-game-id-value="<%= @game.id %>"  data-player = "player1">
+  <h2>Local game</h2>
+  <%= render 'board' %>
+  <div class="d-none" data-game-target="results">
+    <p data-game-target="winner">azdzad</p>
+    <div class="btn btn-primary" data-action="click->game#boardRefresh">
+      <p> Replay ?</p>
+    </div>
+  </div>
+</div>
