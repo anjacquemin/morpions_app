@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
-    @stimulus_controller = (@game.local ? "game" : "online")
+    @stimulus_controller = (@game.local ? "local" : "online")
     # game.update_attribute(:is_ready, true)
   end
 
