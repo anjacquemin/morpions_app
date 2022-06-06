@@ -9,21 +9,24 @@ export default class extends Controller {
 
   static values = {gameId: Number}
 
-  static targets = ["results", "winner", "player", "c0","c1","c2","c3","c4","c5","c6","c7","c8"]
+  static targets = ["results", "winner", "player", "c0","c1","c2","c3","c4","c5","c6","c7","c8", "display"]
 
   connect() {
     this.channel = consumer.subscriptions.create(
       { channel: "GameChannel", id: this.gameIdValue },
       { received: data => {
-          handleGame(this, data["player"], data["case_clicked"])
+          handleData(data, this)
         }
       }
     )
   }
 
-  playerAction(event) {
-    const data = dataBuilding(this, event)
-
+  refresh(){
+    let payload = {
+      type: "replay"
+    }
+    let data = new FormData();
+    data.append ("json", JSON.stringify(payload))
     fetch(`http://localhost:3000/games/${this.gameIdValue}`, {
       method: "PATCH",
       headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
@@ -31,14 +34,19 @@ export default class extends Controller {
     })
   }
 
-  boardRefresh() {
-    const all_tds = Array.from(this.element.querySelectorAll("td"))
-    all_tds.forEach(function(td) {
-      tdUpdate(td, "online")
-    })
-    this.resultsTarget.classList.add("d-none")
-    this.winnerTarget.innerText = ""
-    this.playerTarget.dataset.player = "player1"
+  playerAction(event) {
+    const playerToPlay = this.playerTarget.dataset.player
+    const user = this.playerTarget.dataset.user
+
+    if (user === playerToPlay) {
+      const data = dataBuilding(event, playerToPlay)
+
+      fetch(`http://localhost:3000/games/${this.gameIdValue}`, {
+        method: "PATCH",
+        headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
+        body: data
+      })
+    }
   }
 }
 
@@ -48,6 +56,26 @@ const handleGame = (context, player, clickedCase) => {
     displayResults(context.resultsTarget, context.winnerTarget, player)
     disableClickListenner(context.element)
   }
+}
+
+const handleData = (data, context) => {
+  if (data["type"] === "game_action") {
+    handleGame(context, data["player"], data["case_clicked"])
+  } else if (data["type"] === "ready_to_play") {
+    context.displayTarget.classList.remove("d-none")
+  } else if (data["type"] === "replay") {
+    boardRefresh(context)
+  }
+}
+
+const boardRefresh = (context) => {
+  const all_tds = Array.from(context.element.querySelectorAll("td"))
+  all_tds.forEach(function(td) {
+    tdUpdate(td, "online")
+  })
+  context.resultsTarget.classList.add("d-none")
+  context.winnerTarget.innerText = ""
+  context.playerTarget.dataset.player = "player1"
 }
 
 const boardDisplay = (controller, playerToPlay, clickedCase) => {
@@ -68,10 +96,10 @@ const boardDisplay = (controller, playerToPlay, clickedCase) => {
   eval(`controller.${targetCase}.classList.add(class_to_add)`)
 }
 
-const dataBuilding = (context, event) => {
-  const playerToPlay = context.playerTarget.dataset.player
+const dataBuilding = (event, playerToPlay) => {
   const clickedCase = event.target.dataset.onlineTarget
   let payload = {
+    type: "game_action",
     player: playerToPlay,
     case: clickedCase
   }

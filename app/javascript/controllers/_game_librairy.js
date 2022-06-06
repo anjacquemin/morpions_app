@@ -44,7 +44,7 @@ const allValuesEqual = arr => arr.every(v => v === arr[0])
 
 const tdUpdate = (td, controller_name) => {
   td.dataset.type = "none"
-  td.dataset.action = `click->${controller_name}playerAction`
+  td.dataset.action = `click->${controller_name}#playerAction`
   td.classList.remove ("cross")
   td.classList.remove ("circle")
   td.classList.add ("not_filled")

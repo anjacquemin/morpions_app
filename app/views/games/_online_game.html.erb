@@ -1,10 +1,12 @@
-<div data-controller="online" data-online-game-id-value="<%= @game.id %>">
-  <div data-player = "player1" data-online-target ="player"></div>
+<div data-controller="online" data-online-game-id-value="<%= @game.id %> ">
+  <div data-user =<%=@user%> data-player = "player1" data-online-target ="player"></div>
   <h2>Online game</h2>
-  <%= render 'board' %>
+  <div class=<%=@display_game_class%> data-online-target="display">
+    <%= render 'board' %>
+  </div>
   <div class="d-none" data-online-target="results">
     <p data-online-target="winner">azdzad</p>
-    <div class="btn btn-primary" data-action="click->online#boardRefresh">
+    <div class="btn btn-primary" data-action="click->online#refresh">
       <p> Replay ?</p>
     </div>
   </div>
