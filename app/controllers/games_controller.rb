@@ -1,6 +1,7 @@
 class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
+    @stimulus_controller = (@game.local ? "game" : "online")
     # game.update_attribute(:is_ready, true)
   end
 
@@ -23,10 +24,14 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    puts params
+    puts "in the update action"
+    puts params["json"].class
+    data = JSON.parse(params["json"])
+    puts "data : #{data}"
+    puts data["player"]
     puts "update methode :"
-    puts request
-    GameChannel.broadcast_to(@game, "datadata")
+    puts params["json"]["player"]
+    GameChannel.broadcast_to(@game, player: data["player"], case_clicked: data["case"])
   end
 
 

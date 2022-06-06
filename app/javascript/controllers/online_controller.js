@@ -1,4 +1,4 @@
-// app/javascript/controllers/game_controller.js
+// app/javascript/controllers/game_online_controller.js
 import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 import { eventListeners } from "@popperjs/core"
@@ -8,36 +8,49 @@ export default class extends Controller {
 
   static values = {gameId: Number}
 
-  static targets = ["results", "winner","xxx"]
+
+  static targets = ["results", "winner", "player", "c0","c1","c2","c3","c4","c5","c6","c7","c8"]
 
   connect() {
     console.log(`id ${this.gameIdValue}`)
     this.channel = consumer.subscriptions.create(
       { channel: "GameChannel", id: this.gameIdValue },
-      { received: data =>
-        console.log(`received date : ${data}`)}
+      { received: data => {
+          console.log(`received date : ${data["player"]} && ${data["case_clicked"]}`)
+          boardDisplay(this, data["player"], data["case_clicked"])
+          if(endGameOrNot(this.element)){
+            displayResults(this.resultsTarget, this.winnerTarget, data["player"])
+            disableClickListenner(this.element)
+          }
+        }
+      }
     )
     console.log(`Subscribe to the chatroom with the id ${this.gameIdValue}.`)
   }
 
   playerAction(event) {
-    console.log("player action?")
-    console.log("event")
-    const player_to_play = this.element.dataset.player
-    boardDisplay(event, this, player_to_play)
-    if(endGameOrNot(this.element)){
-      displayResults(this.resultsTarget, this.winnerTarget, player_to_play)
-      disableClickListenner(this.element)
+    const player_to_play = this.playerTarget.dataset.player
+    const case_clicked = event.target.dataset.onlineTarget
+    let payload = {
+      player: player_to_play,
+      case: case_clicked
     }
-    console.log("before send request")
-    sendRequest(this.gameIdValue)
+    let data = new FormData();
+    data.append ("json", JSON.stringify(payload))
+
+    console.log("send rquest")
+    fetch(`http://localhost:3000/games/${this.gameIdValue}`, {
+      method: "PATCH",
+      headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
+      body: data
+    })
   }
 
   boardRefresh() {
     const all_tds = Array.from(this.element.querySelectorAll("td"))
     all_tds.forEach(function(td) {
       td.dataset.type = "none"
-      td.dataset.action = "click->game#playerAction"
+      td.dataset.action = "click->online#playerAction"
       td.classList.remove ("cross")
       td.classList.remove ("circle")
       td.classList.add ("not_filled")
@@ -48,31 +61,26 @@ export default class extends Controller {
   }
 }
 
-const sendRequest = (gameIdValue) => {
-  console.log("send rquest")
-  fetch(`http://localhost:3000/games/${gameIdValue}`, {
-    method: "PATCH",
-    headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
-    body: "somedata"
-  })
-}
 
-
-const boardDisplay = (event, tbody, player_to_play) => {
+const boardDisplay = (controller, player_to_play, case_clicked) => {
+  console.log(case_clicked)
+  console.log(player_to_play)
   let class_to_add
+  let case_target = case_clicked + "Target"
+  console.log(case_target)
   if (player_to_play === "player1") {
     class_to_add = "cross"
-    tbody.element.dataset.player = "player2"
-    event.target.dataset.type = "player1"
+    controller.playerTarget.dataset.player = "player2"
+    eval(`controller.${case_target}.dataset.type = 'player1'`)
   }
   else{
     class_to_add = "circle"
-    tbody.element.dataset.player = "player1"
-    event.target.dataset.type = "player2"
+    controller.playerTarget.dataset.player =  "player1"
+    eval(`controller.${case_target}.dataset.type = 'player2'`)
   }
-  event.target.dataset.action = ""
-  event.target.classList.remove("not_filled")
-  event.target.classList.add(class_to_add)
+  eval(`controller.${case_target}.dataset.action = ''`)
+  eval(`controller.${case_target}.classList.remove("not_filled")`)
+  eval(`controller.${case_target}.classList.add(class_to_add)`)
 }
 
 const displayResults = (resultsTarget, winnerTarget, player_to_play) => {
