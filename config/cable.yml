@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("redis://default:FbfUF8lOI2RKUg5cNon8ACGurj9z1iS6@redis-12284.c77.eu-west-1-1.ec2.cloud.redislabs.com:12284") { "redis://localhost:6379/1" } %>
+  url: <%= ENV.fetch("REDISCLOUD_URL") { "redis://localhost:6379/1" } %>
   channel_prefix: morpions_app_production
