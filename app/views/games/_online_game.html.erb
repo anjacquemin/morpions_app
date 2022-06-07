@@ -1,6 +1,10 @@
 <div data-controller="online" data-online-game-id-value="<%= @game.id %> ">
   <div data-user =<%=@user%> data-player = "player1" data-online-target ="player"></div>
   <h2>Online game</h2>
+  <div class=<%=@display_waiting_class%> data-online-target="waiting">
+    <p>Waiting for an other player to join</p>
+    <p>You can directly share the URL : <%= game_url(@game) %></p>
+  </div>
   <div class=<%=@display_game_class%> data-online-target="display">
     <%= render 'board' %>
   </div>

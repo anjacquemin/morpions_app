@@ -23,7 +23,7 @@ export default class extends Controller {
   boardRefresh() {
     const all_tds = Array.from(this.element.querySelectorAll("td"))
     all_tds.forEach(function(td) {
-      tdUpdate(td, "local#")
+      tdUpdate(td, "local")
     })
     this.resultsTarget.classList.add("d-none")
     this.winnerTarget.innerText = ""

@@ -9,7 +9,7 @@ export default class extends Controller {
 
   static values = {gameId: Number}
 
-  static targets = ["results", "winner", "player", "c0","c1","c2","c3","c4","c5","c6","c7","c8", "display"]
+  static targets = ["results", "winner", "player", "c0","c1","c2","c3","c4","c5","c6","c7","c8", "display", "waiting"]
 
   connect() {
     this.channel = consumer.subscriptions.create(
@@ -63,6 +63,7 @@ const handleData = (data, context) => {
     handleGame(context, data["player"], data["case_clicked"])
   } else if (data["type"] === "ready_to_play") {
     context.displayTarget.classList.remove("d-none")
+    context.waitingTarget.classList.add("d-none")
   } else if (data["type"] === "replay") {
     boardRefresh(context)
   }

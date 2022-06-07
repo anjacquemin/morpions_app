@@ -2,6 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
+.games{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 16px
+}
+
+.new-game{
+  width: 200px;
+  padding-left: 25px;
+}
+
 td.not_filled {
   // background-color: black;
   background-image: asset-url("not_used.svg");
@@ -21,4 +32,31 @@ td.circle {
   background-image: asset-url("2.svg");
   height: 75px;
   width: 75px;
+}
+
+.form-check .form-check-input {
+  margin-left: -0.5em !important;
+}
+
+.form-check-label.collection_radio_buttons{
+  margin-left: 1em !important;
+}
+
+
+@media(max-width: 1216px) {
+  .games {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media(max-width: 992px) {
+  .games {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(max-width: 768px) {
+  .games {
+    grid-template-columns: 1fr;
+  }
 }
