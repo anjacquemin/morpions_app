@@ -1,9 +1,9 @@
 <div data-controller="local" data-local-game-id-value="<%= @game.id %>"  data-player = "player1">
-  <h2>Local game</h2>
+  <h2><%= @game.name %></h2>
   <%= render 'board' %>
   <div class="d-none" data-local-target="results">
-    <p data-local-target="winner">azdzad</p>
-    <div class="btn btn-primary" data-action="click->local#boardRefresh">
+    <p class="mt-3" data-local-target="winner">to replaced</p>
+    <div class="btn btn-flat" data-action="click->local#boardRefresh">
       <p> Replay ?</p>
     </div>
   </div>
