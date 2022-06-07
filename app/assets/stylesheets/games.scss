@@ -15,21 +15,35 @@
 
 td.not_filled {
   // background-color: black;
-  background-image: asset-url("not_used.svg");
+  border-color: black;
+  border-width: 2px;
   height: 75px;
   width: 75px;
 }
 
 td.cross {
   // background-color: black;
-  background-image: asset-url("1.svg");
+  background-image: url("https://dictionary.cambridge.org/fr/images/thumb/cross_noun_002_09265.jpg?version=5.0.243");
+  background-size: cover;
+  background-position: center;
+  height: 75px;
+  width: 75px;
+  border-color: black;
+  border-width: 2px;
   height: 75px;
   width: 75px;
 }
 
 td.circle {
   // background-color: black;
-  background-image: asset-url("2.svg");
+  background-image: url("https://farcrydesign.com/images/tutorials/FinalCircle.png");
+  background-size: 100% 70%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 75px;
+  width: 75px;
+  border-color: black;
+  border-width: 2px;
   height: 75px;
   width: 75px;
 }
