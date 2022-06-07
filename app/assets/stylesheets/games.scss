@@ -23,7 +23,7 @@ td.not_filled {
 
 td.cross {
   // background-color: black;
-  background-image: url("https://dictionary.cambridge.org/fr/images/thumb/cross_noun_002_09265.jpg?version=5.0.243");
+  background-image: asset-url("cross.png");
   background-size: cover;
   background-position: center;
   height: 75px;
@@ -36,7 +36,7 @@ td.cross {
 
 td.circle {
   // background-color: black;
-  background-image: url("https://farcrydesign.com/images/tutorials/FinalCircle.png");
+  background-image: asset-url("circle.png");
   background-size: 100% 70%;
   background-repeat: no-repeat;
   background-position: center;

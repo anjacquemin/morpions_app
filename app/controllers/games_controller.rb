@@ -6,7 +6,7 @@ class GamesController < ApplicationController
     @display_waiting_class = "d"
     @url = "#{games_url}/"
     unless session["player-#{@game.name}".to_sym]
-      @display_game_class = ""
+      @display_game_class = "d"
       @display_waiting_class = "d-none"
       session["player-#{@game.name}".to_sym] = "player2"
       @game.update_attribute(:is_ready, true)

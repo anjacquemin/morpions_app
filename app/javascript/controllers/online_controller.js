@@ -15,7 +15,7 @@ export default class extends Controller {
     this.channel = consumer.subscriptions.create(
       { channel: "GameChannel", id: this.gameIdValue },
       { received: data => {
-          console.log(`Received date : ${data}`)
+          console.log(`Received date : ${data["type"]} ${data["player"]}`)
           handleData(data, this)
         }
       }
