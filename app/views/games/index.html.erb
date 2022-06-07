@@ -1,15 +1,13 @@
 <div class="container">
   <h1>Welcome to morpions site</h1>
-  <div class="d-flex flex-column">
-    <div class="d-flex  flex-column">
+  <div class="d-flex justify-content-around">
+    <div class="games">
       <% @not_ready_games.each do |game| %>
-      <div>
-        <%= link_to game.name, game_path(game) %>
-        <% end %>
-      </div>
+        <%= render "game", game: game %>
+      <% end %>
     </div>
-    <div>
-      <p>create a new game</p>
+    <div class="new-game">
+      <h2>Create a new game</h2>
       <%= simple_form_for(@game)do|f|%>
         <%= f.input :name %>
         <%= f.input :local, as: :radio_buttons, collection: ['Local', 'Online'] %>
