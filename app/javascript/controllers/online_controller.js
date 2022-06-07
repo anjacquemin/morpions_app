@@ -15,6 +15,7 @@ export default class extends Controller {
     this.channel = consumer.subscriptions.create(
       { channel: "GameChannel", id: this.gameIdValue },
       { received: data => {
+          console.log(`Received date : ${data}`)
           handleData(data, this)
         }
       }
@@ -27,7 +28,7 @@ export default class extends Controller {
     }
     let data = new FormData();
     data.append ("json", JSON.stringify(payload))
-    fetch(`http://localhost:3000/games/${this.gameIdValue}`, {
+    fetch(`${this.playerTarget.dataset.url}${this.gameIdValue}`, {
       method: "PATCH",
       headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
       body: data
@@ -40,8 +41,8 @@ export default class extends Controller {
 
     if (user === playerToPlay) {
       const data = dataBuilding(event, playerToPlay)
-
-      fetch(`http://localhost:3000/games/${this.gameIdValue}`, {
+      console.log(`url: ${this.playerTarget.dataset.user}${this.gameIdValue}`)
+      fetch(`${this.playerTarget.dataset.url}${this.gameIdValue}`, {
         method: "PATCH",
         headers: { "Accept": "application/json", "X-CSRF-Token": csrfToken() },
         body: data

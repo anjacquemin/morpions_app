@@ -4,6 +4,7 @@ class GamesController < ApplicationController
     @stimulus_controller = (@game.local ? "local" : "online")
     @display_game_class = "d-none"
     @display_waiting_class = "d"
+    @url = "#{games_url}/"
     unless session["player-#{@game.name}".to_sym]
       @display_game_class = ""
       @display_waiting_class = "d-none"
@@ -41,6 +42,7 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     data = JSON.parse(params["json"])
+    puts "update function : data : #{data}"
     if data["type"] == "game_action"
       GameChannel.broadcast_to(@game, type: data["type"], player: data["player"], case_clicked: data["case"])
     else
