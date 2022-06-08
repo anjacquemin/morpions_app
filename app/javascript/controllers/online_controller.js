@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 import { eventListeners } from "@popperjs/core"
 import { csrfToken } from "@rails/ujs"
-import {endGameOrNot, displayResults, disableClickListenner, tdUpdate} from  "./_game_librairy"
+import {thereIsAWinner, displayResults, disableClickListenner, tdUpdate, endGame} from  "./_game_librairy"
 
 export default class extends Controller {
 
@@ -53,8 +53,13 @@ export default class extends Controller {
 
 const handleGame = (context, player, clickedCase) => {
   boardDisplay(context, player, clickedCase)
-  if(endGameOrNot(context.element)){
-    displayResults(context.resultsTarget, context.winnerTarget, player)
+  if(thereIsAWinner(context.element)){
+    let endGameSentence = `${player} wins`
+    displayResults(context.resultsTarget, context.winnerTarget, endGameSentence)
+    disableClickListenner(context.element)
+  } else if (endGame(context.element)){
+    let endGameSentence = `Nobody wins`
+    displayResults(context.resultsTarget, context.winnerTarget, endGameSentence)
     disableClickListenner(context.element)
   }
 }

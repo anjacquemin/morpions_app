@@ -1,6 +1,6 @@
-const displayResults = (resultsTarget, winnerTarget, PlayerToPlay) => {
+const displayResults = (resultsTarget, winnerTarget, endGameSentence) => {
   resultsTarget.classList.remove("d-none")
-  winnerTarget.innerText = `${PlayerToPlay} win`
+  winnerTarget.innerText = endGameSentence
 }
 
 const disableClickListenner = (element) => {
@@ -8,9 +8,15 @@ const disableClickListenner = (element) => {
   allTds.forEach(td => td.dataset.action = "")
 }
 
-const endGameOrNot = (element) => {
+const thereIsAWinner = (element) => {
   const allTds = Array.from(element.querySelectorAll("td"))
   return checkLines(allTds) || checkColums(allTds) || checkDiagonales(allTds)
+}
+
+const endGame = (element) => {
+  const allTds = Array.from(element.querySelectorAll("td"))
+  const tdsType = allTds.map(x => x.dataset.type)
+  if(!tdsType.includes("none")) return true
 }
 
 const checkLines = (allTds) => {
@@ -34,9 +40,9 @@ const checkDiagonales = (allTds) => {
 }
 
 const check = (tds) => {
-  const tds_type = tds.map(x => x.dataset.type)
-  if (tds_type.includes("none")) return false;
-  return allValuesEqual(tds_type)
+  const tdsType = tds.map(x => x.dataset.type)
+  if (tdsType.includes("none")) return false;
+  return allValuesEqual(tdsType)
 }
 
 const allValuesEqual = arr => arr.every(v => v === arr[0])
@@ -50,4 +56,4 @@ const tdUpdate = (td, controller_name) => {
   td.classList.add ("not_filled")
 }
 
-export { displayResults, disableClickListenner, endGameOrNot, tdUpdate }
+export { displayResults, disableClickListenner, thereIsAWinner, tdUpdate, endGame }
