@@ -1,0 +1,12 @@
+<div class="d-flex flex-column">
+  <div class="games">
+    <% @not_ready_games.each do |game| %>
+      <%= render "game", game: game %>
+    <% end %>
+  </div>
+  <div class = "d-flex justify-content-center mt-5">
+    <% pagination(@page).each do |n| %>
+      <%= link_to n, "#{games_path}/?page=#{n}", class: "mx-1"%>
+    <% end %>
+  </div>
+</div>
