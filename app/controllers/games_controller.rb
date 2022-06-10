@@ -13,14 +13,15 @@ class GamesController < ApplicationController
       GameChannel.broadcast_to(@game, type: "ready_to_play")
     end
     if session["player-#{@game.name}"] == "player2"
-      @user = "player2"
+      @user = "playpaginationer2"
     else
       @user = "player1"
     end
   end
 
   def index
-    @games = Game.all
+    @page = (params[:page] ? params[:page].to_i : 1)
+    @games = Game.order(created_at: :desc).offset((@page-1) * 5).limit(5)
     @not_ready_games = @games.select {|game| !game.is_ready}
     @game = Game.new
   end
