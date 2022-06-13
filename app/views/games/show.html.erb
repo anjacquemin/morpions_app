@@ -1,5 +1,5 @@
 <div class="container">
-  <% if @game.local == true %>
+  <% if @game.local %>
     <%= render 'local_game' %>
   <% else %>
     <%= render "online_game" %>

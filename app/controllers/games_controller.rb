@@ -27,14 +27,15 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(games_params)
     session["player-#{@game.name}".to_sym] = "player1"
-    @game.local = ("Local" == params[:game][:local])
+    @game.local = local_or_not(params)
     if @game.save
       #if local game, no need to wait for another player
       @game.update_attribute(:is_ready, true) if @game.local
       @game.update_attribute(:number_of_players, 1)
       redirect_to(@game)
     else
-      flash[:notice] = "Name can not be blank..."
+      @game.valid?
+      flash[:notice] = @game.errors.messages.map{|k, v| "#{k} #{v.first} \n" }.join(" & ")
       redirect_to games_path
     end
   end
@@ -66,4 +67,7 @@ class GamesController < ApplicationController
       player_session == "player2" ? arg1 : arg2
     end
 
+    def local_or_not(params)
+      params[:game][:local].empty? ? nil : ("Local" == params[:game][:local])
+    end
 end
