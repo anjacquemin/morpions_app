@@ -28,14 +28,14 @@ class GamesController < ApplicationController
     @game = Game.new(games_params)
     session["player-#{@game.name}".to_sym] = "player1"
     @game.local = local_or_not(params)
+    @game.number_of_players = 1
     if @game.save
       #if local game, no need to wait for another player
       @game.update_attribute(:is_ready, true) if @game.local
-      @game.update_attribute(:number_of_players, 1)
       redirect_to(@game)
     else
       @game.valid?
-      flash[:notice] = @game.errors.messages.map{|k, v| "#{k} #{v.first} \n" }.join(" & ")
+      flash[:info] = @game.errors.messages.map{|k, v| "#{k} #{v.first} \n" }.join(" & ")
       redirect_to games_path
     end
   end
